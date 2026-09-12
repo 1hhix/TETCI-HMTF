@@ -1,0 +1,11 @@
+_target_: rl4co.utils.trainer.RL4COTrainer
+
+default_root_dir: ${paths.output_dir}
+
+gradient_clip_val: 1.0
+accelerator: "auto"
+precision: "16-mixed"
+
+check_val_every_n_epoch: 1
+
+deterministic: False

@@ -1,0 +1,30 @@
+# @package _global_
+
+defaults:
+  - /experiment/base-100.yaml
+  - _self_
+
+env:
+  generator_params:
+    variant_preset: "all"
+    subsample: False
+  data_dir: data_train
+
+model:
+  _target_: routefinder.models.baselines.mtpomo.MTPOMO
+  automatic_optimization: False
+  policy:
+    _target_: routefinder.models.baselines.mtpomo.MTPOMOPolicy
+  normalize_reward: "none"
+logger:
+  project_name: "mtpomo_100"
+  tensorboard:
+    save_dir: logs/baseline/${logger.project_name}/tensorboard/
+
+callbacks:
+  model_checkpoint:
+    dirpath: pretrain_baseline/${logger.project_name}
+hydra:
+  run:
+    dir:  logs/baseline/${logger.project_name}/tensorboard/
+devices: 0

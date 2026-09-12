@@ -1,0 +1,53 @@
+# @package _global_
+
+defaults:
+  - override /model: routefinder.yaml
+  - override /env: mtvrp.yaml
+  - override /callbacks: default.yaml
+  - override /trainer: default.yaml
+  - override /logger: tensorboard.yaml
+
+env:
+  generator_params:
+    num_loc: 50
+    variant_preset: "all"
+
+  val_file: [cvrp/val/50.npz, ovrp/val/50.npz,
+  ]
+
+  val_dataloader_names: [cvrp50, ovrp50,
+  ]
+
+  test_file: [cvrp/test/50.npz, ovrp/test/50.npz,
+  ]
+
+  test_dataloader_names: ${env.val_dataloader_names}
+
+model:
+  batch_size: 256
+  val_batch_size: 512
+  test_batch_size: ${model.val_batch_size}
+  train_data_size: 128_000
+  val_data_size: 64
+  test_data_size: 64
+  optimizer_kwargs:
+    lr: 3e-4
+    weight_decay: 1e-6
+  lr_scheduler:
+    "MultiStepLR"
+  lr_scheduler_kwargs:
+    milestones: [270, 295]
+    gamma: 0.1
+  normalize_reward: "exponential"
+  norm_operation: "div"
+  alpha: 0.25
+
+trainer:
+
+  max_epochs: 200
+  precision: "32-true"
+
+callbacks:
+  model_checkpoint:
+    dirpath: logs/${mode}/runs/Test/${logger.project_name}/checkpoints
+    monitor: "val/reward/cvrp50"

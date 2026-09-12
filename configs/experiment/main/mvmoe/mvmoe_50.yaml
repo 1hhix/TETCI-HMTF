@@ -1,0 +1,34 @@
+# @package _global_
+
+defaults:
+  - base-50.yaml
+  - _self_
+
+env:
+  generator_params:
+    subsample: False
+  data_dir: data_train
+
+model:
+  _target_: routefinder.models.baselines.mvmoe.model.MVMoE
+  automatic_optimization: False
+  extra_loss: True
+  test_batch_size: ${model.val_batch_size}
+  policy:
+    _target_: routefinder.models.baselines.mvmoe.policy.MVMoEPolicy
+    hierarchical_gating: False
+  normalize_reward: "none"
+
+logger:
+  project_name: "mvmoe_50"
+  tensorboard:
+    save_dir: logs/baseline/${logger.project_name}/tensorboard/
+
+callbacks:
+  model_checkpoint:
+    dirpath: pretrain_baseline/${logger.project_name}
+hydra:
+  run:
+    dir:  logs/baseline/${logger.project_name}/tensorboard/
+devices: 0
+

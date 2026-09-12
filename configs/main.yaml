@@ -1,0 +1,44 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - callbacks: default.yaml
+  - hydra: default.yaml
+  - logger: null
+  - trainer: default.yaml
+  - paths: default.yaml
+  - extras: default.yaml
+  - model: hmtf.yaml
+  - env: default.yaml
+
+  - experiment: base-50.yaml
+
+  - hparams_search: null
+
+  - optional local: default.yaml
+
+  - debug: null
+
+mode: "train"
+
+tags: ["dev"]
+
+train: True
+
+test: True
+
+compile: False
+
+ckpt_path: null
+
+seed: null
+
+matmul_precision: "medium"
+
+model:
+  generate_default_data: False
+  metrics:
+    train: ["loss", "reward", "norm_reward", "norm_vals"]
+    val: ["reward", "max_reward", "max_aug_reward", "norm_reward", "gap_to_bks"]
+    test: ${.val}
+    log_on_step: True

@@ -1,0 +1,36 @@
+# @package _global_
+
+defaults:
+  - /experiment/base-100.yaml
+  - _self_
+
+env:
+  generator_params:
+    variant_preset: "all"
+    sample_problem: True
+    two_task: False
+    llm_embedding: True
+    llm_model: "PLM/task_embeddings_USE"
+  data_dir: data_train
+
+model:
+  automatic_optimization: False
+  if_norm: True
+  c: 0.4
+  use_mtl: True
+  _target_: hmtf.models.model.HMTF
+  policy:
+    _target_: hmtf.models.policy.DFMPolicy_Hyper
+    normalization: "rms"
+    encoder_use_prenorm: True
+    encoder_use_post_layers_norm: True
+    use_hyper_encoder: True
+    use_hyper_decoder: True
+    decoder_time_step: False
+    parallel_gated_kwargs:
+      mlp_activation: "silu"
+
+devices: 0
+
+logger:
+  project_name: "HMTF"
